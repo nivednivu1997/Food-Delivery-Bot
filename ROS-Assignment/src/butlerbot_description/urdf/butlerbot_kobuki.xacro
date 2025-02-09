@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<robot name="butlerbot_kobuki" xmlns:xacro="http://ros.org/wiki/xacro">
+
+
+    <xacro:include filename="$(find butlerbot_description)/urdf/common_properties.xacro" />
+    <xacro:include filename="$(find butlerbot_description)/urdf/butlerbot_kobuki_gazebo.xacro" />
+
+
+    <!-- Base Link -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <mesh filename="package://butlerbot_description/meshes/kobuki/main_body.dae" />
+            </geometry>
+            <origin xyz="0.001 0 0.05199" rpy="0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.10938" radius="0.178" />
+            </geometry>
+            <origin xyz="0.0 0 0.05949" rpy="0 0 0" />
+        </collision>
+        <inertial>
+            <origin xyz="0.01 0 0" />
+            <mass value="2.4" />
+            <inertia ixx="0.019995" ixy="0.0" ixz="0.0"
+                iyy="0.019995" iyz="0.0"
+                izz="0.03675" />
+        </inertial>
+    </link>
+
+
+    <!-- Base Footprint -->
+    <link name="base_footprint" />
+
+    <joint name="base_joint" type="fixed">
+        <origin xyz="0 0 0.0102" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="base_footprint" />
+    </joint>
+
+
+    <!-- Left Wheel -->
+    <link name="wheel_left_link">
+        <visual>
+            <geometry>
+                <mesh filename="package://butlerbot_description/meshes/wheel.dae" />
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.0206" radius="0.0352" />
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+        </inertial>
+    </link>
+
+    <joint name="joint_tire_left" type="continuous">
+        <parent link="base_link" />
+        <child link="wheel_left_link" />
+        <origin rpy="-1.5707963267948966 0 0" xyz="0.00 0.115 0.0250" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+
+    <!-- Right Wheel -->
+    <link name="wheel_right_link">
+        <visual>
+            <geometry>
+                <mesh filename="package://butlerbot_description/meshes/wheel.dae" />
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.0206" radius="0.0350" />
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+        </inertial>
+    </link>
+
+    <joint name="joint_tire_right" type="continuous">
+        <parent link="base_link" />
+        <child link="wheel_right_link" />
+        <origin rpy="-1.5707963267948966 0 0" xyz="0.00 -0.115 0.0250" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+
+    <!-- Front Castor Wheel -->
+    <link name="caster_front_link">
+        <collision>
+            <geometry>
+                <cylinder length="0.0176" radius="0.017" />
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                iyy="0.001" iyz="0.0"
+                izz="0.001" />
+        </inertial>
+    </link>
+
+    <joint name="caster_front_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="caster_front_link" />
+        <origin xyz="0.115 0.0 0.007" rpy="${-M_PI/2} 0 0" />
+    </joint>
+
+
+    <!-- Back Castor Wheel -->
+    <link name="caster_back_link">
+        <collision>
+            <geometry>
+                <cylinder length="0.0176" radius="0.017" />
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </collision>
+        <inertial>
+            <mass value="0.01" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+                iyy="0.001" iyz="0.0"
+                izz="0.001" />
+        </inertial>
+    </link>
+
+    <joint name="caster_back_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="caster_back_link" />
+        <origin xyz="-0.135 0.0 0.009" rpy="${-M_PI/2} 0 0" />
+    </joint>
+
+
+    <!-- Kobuki's sensors -->
+
+    <!-- IMU Sensor -->
+    <link name="imu_link">
+		<visual>
+			<geometry>
+				<box size="0.05 0.05 0.05" />
+			</geometry>
+			<material name="red">
+				<color rgba="1.0 0.2 0.2 1.0" />
+			</material>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="0.1 0.1 0.1" />
+			</geometry>
+		</collision>
+	</link>
+
+	<joint name="imu_joint" type="fixed">
+		<parent link="base_link" />
+		<child link="imu_link" />
+		<origin xyz="0 0 0.05" />
+	</joint>
+
+
+    <!-- Left Cliff Sensor -->
+    <link name="cliff_sensor_left_link">
+        <inertial>
+            <mass value="0.0001" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+                iyy="0.0001" iyz="0.0"
+                izz="0.0001" />
+        </inertial>
+    </link>
+
+    <joint name="cliff_sensor_left_joint" type="fixed">
+        <origin xyz="0.08734 0.13601 0.0214" rpy="0 ${M_PI/2} 0" />
+        <parent link="base_link" />
+        <child link="cliff_sensor_left_link" />
+    </joint>
+
+
+    <!-- Right Cliff Sensor -->
+    <link name="cliff_sensor_right_link">
+        <inertial>
+            <mass value="0.0001" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+                iyy="0.0001" iyz="0.0"
+                izz="0.0001" />
+        </inertial>
+    </link>
+
+    <joint name="cliff_sensor_right_joint" type="fixed">
+        <origin xyz="0.085 -0.13601 0.0214" rpy="0 ${M_PI/2} 0" />
+        <parent link="base_link" />
+        <child link="cliff_sensor_right_link" />
+    </joint>
+
+
+    <!-- Front Cliff Sensor -->
+    <link name="cliff_sensor_front_link">
+        <inertial>
+            <mass value="0.0001" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+                iyy="0.0001" iyz="0.0"
+                izz="0.0001" />
+        </inertial>
+    </link>
+
+    <joint name="cliff_sensor_front_joint" type="fixed">
+        <origin xyz="0.156 0.00 0.0214" rpy="0 ${M_PI/2} 0" />
+        <parent link="base_link" />
+        <child link="cliff_sensor_front_link" />
+    </joint>
+
+</robot>

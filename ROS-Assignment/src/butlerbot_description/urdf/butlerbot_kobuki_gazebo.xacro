@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<robot name="kobuki_sim" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<gazebo reference="wheel_left_link">
+		<mu1>1.0</mu1>
+		<mu2>1.0</mu2>
+		<kp>1000000.0</kp>
+		<kd>100.0</kd>
+		<minDepth>0.001</minDepth>
+		<maxVel>1.0</maxVel>
+	</gazebo>
+
+	<gazebo reference="wheel_right_link">
+		<mu1>1.0</mu1>
+		<mu2>1.0</mu2>
+		<kp>1000000.0</kp>
+		<kd>100.0</kd>
+		<minDepth>0.001</minDepth>
+		<maxVel>1.0</maxVel>
+	</gazebo>
+
+	<gazebo reference="caster_front_link">
+		<mu1>0.0</mu1>
+		<mu2>0.0</mu2>
+		<kp>1000000.0</kp>
+		<kd>100.0</kd>
+		<minDepth>0.001</minDepth>
+		<maxVel>1.0</maxVel>
+	</gazebo>
+
+	<gazebo reference="caster_back_link">
+		<mu1>0.0</mu1>
+		<mu2>0.0</mu2>
+		<kp>1000000.0</kp>
+		<kd>100.0</kd>
+		<minDepth>0.001</minDepth>
+		<maxVel>1.0</maxVel>
+	</gazebo>
+
+	<gazebo reference="base_link">
+		<mu1>0.3</mu1>
+		<mu2>0.3</mu2>
+		<sensor type="contact" name="bumpers">
+			<always_on>1</always_on>
+			<update_rate>50.0</update_rate>
+			<visualize>true</visualize>
+			<contact>
+				<collision>base_footprint_collision_base_link</collision>
+			</contact>
+		</sensor>
+	</gazebo>
+
+	<gazebo reference="cliff_sensor_left_link">
+		<sensor type="ray" name="cliff_sensor_left">
+			<always_on>true</always_on>
+			<update_rate>50</update_rate>
+			<visualize>true</visualize>
+			<ray>
+				<scan>
+					<horizontal>
+						<samples>50</samples>
+						<resolution>1.0</resolution>
+						<min_angle>-0.0436</min_angle>
+						<max_angle>0.0436</max_angle>
+					</horizontal>
+				</scan>
+				<range>
+					<min>0.01</min>
+					<max>0.15</max>
+					<resolution>1.0</resolution>
+				</range>
+			</ray>
+		</sensor>
+	</gazebo>
+
+	<gazebo reference="cliff_sensor_right_link">
+		<sensor type="ray" name="cliff_sensor_right">
+			<always_on>true</always_on>
+			<update_rate>50</update_rate>
+			<visualize>true</visualize>
+			<ray>
+				<scan>
+					<horizontal>
+						<samples>50</samples>
+						<resolution>1.0</resolution>
+						<min_angle>-0.0436</min_angle>
+						<max_angle>0.0436</max_angle>
+					</horizontal>
+				</scan>
+				<range>
+					<min>0.01</min>
+					<max>0.15</max>
+					<resolution>1.0</resolution>
+				</range>
+			</ray>
+		</sensor>
+	</gazebo>
+
+	<gazebo reference="cliff_sensor_front_link">
+		<sensor type="ray" name="cliff_sensor_front">
+			<always_on>true</always_on>
+			<update_rate>50</update_rate>
+			<visualize>true</visualize>
+			<ray>
+				<scan>
+					<horizontal>
+						<samples>50</samples>
+						<resolution>1.0</resolution>
+						<min_angle>-0.0436</min_angle>  <!-- -2.5 degree -->
+						<max_angle>0.0436</max_angle> <!-- 2.5 degree -->
+					</horizontal>
+				</scan>
+				<range>
+					<min>0.01</min>
+					<max>0.15</max>
+					<resolution>1.0</resolution>
+				</range>
+			</ray>
+		</sensor>
+	</gazebo>
+
+	<gazebo reference="imu_link">
+		<sensor name="imu_sensor" type="imu">
+			<ros>
+				<remapping>~/out:=imu</remapping>
+			  </ros>
+			<plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+				<initial_orientation_as_reference>false</initial_orientation_as_reference>
+			</plugin>
+			<always_on>true</always_on>
+			<update_rate>100</update_rate>
+			<visualize>true</visualize>
+			<imu>
+				<angular_velocity>
+					<x>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>2e-4</stddev>
+							<bias_mean>0.0000075</bias_mean>
+							<bias_stddev>0.0000008</bias_stddev>
+						</noise>
+					</x>
+					<y>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>2e-4</stddev>
+							<bias_mean>0.0000075</bias_mean>
+							<bias_stddev>0.0000008</bias_stddev>
+						</noise>
+					</y>
+					<z>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>2e-4</stddev>
+							<bias_mean>0.0000075</bias_mean>
+							<bias_stddev>0.0000008</bias_stddev>
+						</noise>
+					</z>
+				</angular_velocity>
+				<linear_acceleration>
+					<x>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>1.7e-2</stddev>
+							<bias_mean>0.1</bias_mean>
+							<bias_stddev>0.001</bias_stddev>
+						</noise>
+					</x>
+					<y>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>1.7e-2</stddev>
+							<bias_mean>0.1</bias_mean>
+							<bias_stddev>0.001</bias_stddev>
+						</noise>
+					</y>
+					<z>
+						<noise type="gaussian">
+							<mean>0.0</mean>
+							<stddev>1.7e-2</stddev>
+							<bias_mean>0.1</bias_mean>
+							<bias_stddev>0.001</bias_stddev>
+						</noise>
+					</z>
+				</linear_acceleration>
+			</imu>
+		</sensor>
+	</gazebo>
+
+
+	<gazebo>
+		<plugin name='diff_drive' filename='libgazebo_ros_diff_drive.so'>
+
+			<!-- wheels -->
+			<left_joint>joint_tire_left</left_joint>
+			<right_joint>joint_tire_right</right_joint>
+
+			<!-- kinematics -->
+			<wheel_separation>0.4</wheel_separation>
+			<wheel_diameter>0.1</wheel_diameter>
+
+			<!-- limits -->
+			<max_wheel_torque>20</max_wheel_torque>
+			<max_wheel_acceleration>1.0</max_wheel_acceleration>
+
+			<!-- output -->
+			<publish_odom>true</publish_odom>
+			<publish_odom_tf>true</publish_odom_tf>
+			<publish_wheel_tf>true</publish_wheel_tf>
+
+
+			<odometry_frame>odom</odometry_frame>
+			<robot_base_frame>base_link</robot_base_frame>
+		</plugin>
+	</gazebo>
+</robot>
