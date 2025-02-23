@@ -5,8 +5,10 @@
 
 This ROS 2-based Food delivery Bot project implements a behavior tree for an autonomous delivery robot, handling order processing, navigation, and task execution. It subscribes to robot state updates, processes orders, navigates between predefined locations (e.g., kitchen, tables, home), and manages failure conditions such as order cancellations and timeouts.
 
-## [Demonstration](https://drive.google.com/file/d/1Emu8EpixYeHzUSP-oKnuVpvai1Fv_Ksk/view?usp=sharing): 
-
+## [Demonstration]:
+```
+https://drive.google.com/file/d/1Emu8EpixYeHzUSP-oKnuVpvai1Fv_Ksk/view?usp=sharing
+```
 
 
 ## Steps to run
