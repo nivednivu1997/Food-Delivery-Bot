@@ -50,6 +50,12 @@ ros2 topic pub --once /robot_state std_msgs/String '{"data": "{\"order_received\
 
 ```
 
+## Acknowledgments  
+
+This project utilizes the Gazebo simulation setup from [ROS-Assignment](https://github.com/manojm-dev/ROS-Assignment).  
+Credits to **[manojm-dev](https://github.com/manojm-dev)** for providing the original simulation setup.  
+
+
 
 
 
