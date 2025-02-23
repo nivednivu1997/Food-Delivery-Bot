@@ -12,16 +12,16 @@ This ROS 2-based Food delivery Bot project implements a behavior tree for an aut
 ## Steps to run
 
 
-```
 1. Clone the repo 
+
 ```
 git clone https://github.com/nivednivu1997/Food-delivery-Bot.git
 ```
-3. Install Dependencies
+2. Install Dependencies
 ```
 rosdep install --from-path src --ignore-src -y
 ```
-4. Building
+3. Building the package
 ```
  colon build --symlink-install
 ```
@@ -43,7 +43,7 @@ cd ROS-Assignment/src &&
 python3 py_tree.py
 ```
 4. Run the publisher to give command(example command)
-
+```
 ros2 topic pub --once /robot_state std_msgs/String '{"data": "{\"order_received\": true, \"order_canceled\": false, \"confirmation_kitchen\": true, \"confirmation_table\": {\"table1\": true}, \"current_task\": null, \"tables\": [\"table1\"]}"}'
 
 ```
