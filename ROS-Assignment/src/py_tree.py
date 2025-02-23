@@ -42,8 +42,12 @@ class RobotStateSubscriber(Node):
         self.subscription  # Prevent unused variable warning
         self.get_logger().info("Robot state subscriber initialized.")
         self.msg_queue = queue.Queue() 
+        self.behavior_tree = None  # ✅ Store behavior tree
+        self.previous_tables = []  # ✅ Track changes
+
 
     def listener_callback(self, msg):
+        print("inside listener callback")
         try:
             new_state = json.loads(msg.data)  # ✅ Parse JSON properly
             print(f"📥 Received raw message: {msg.data}")  # Debug raw data
@@ -354,13 +358,27 @@ class MoveToHome(py_trees.behaviour.Behaviour):
 
         print("✅ Arrived at home base!")
         return py_trees.common.Status.SUCCESS
+
+
 class FinalState(py_trees.behaviour.Behaviour):
     def __init__(self):
-        super().__init__("FinalState")
+        super(FinalState, self).__init__("FinalState")
+        self.finished = False  # ✅ Track completion
 
     def update(self):
-        print("🏁 All deliveries completed! Stopping behavior tree.")
-        return py_trees.common.Status.SUCCESS
+        global node
+        if not self.finished:
+            while not node.msg_queue.empty():
+                try:
+                    node.msg_queue.get_nowait()  # Remove all messages
+                except queue.Empty:
+                    break
+
+            print("✅ Final state reached. Queue cleared.")
+            self.finished = True  # ✅ Mark as finished
+            return py_trees.common.Status.SUCCESS
+        return py_trees.common.Status.FAILURE  # ✅ Prevent further ticks
+
 
 
 
@@ -420,7 +438,7 @@ def main():
 
     while rclpy.ok():
         try:
-            new_state = node.msg_queue.get(timeout=1)  # ✅ Wait for new message
+            new_state = node.msg_queue.get_nowait()  # ✅ Wait for new message
             print(f"✅ Received new state: {new_state}")
             
             robot_state.update(new_state)
@@ -436,9 +454,32 @@ def main():
         except queue.Empty:
             print("⏳ No new order received. Waiting...")
 
-        behaviour_tree_root.tick()  # ✅ Process behavior tree
+        if behaviour_tree_root:
+            behaviour_tree_root.tick()
+
+            # ✅ Check if FinalState is reached
+        if behaviour_tree_root.root.status == py_trees.common.Status.SUCCESS:
+            print("✅ Behavior tree completed. Clearing queue.")
+            robot_state = {
+            "order_received": False,
+            "order_canceled": False,
+            "confirmation_kitchen": False,
+            "confirmation_table": {},
+            "current_task": None,
+            "tables": [],
+            }
+            while not node.msg_queue.empty():
+                try:
+                    node.msg_queue.get_nowait()
+                except queue.Empty:
+                    break
+            print("✅ Resetting behavior tree.")
+            behaviour_tree_root = py_trees.trees.BehaviourTree(behavior_tree) # ✅ Stop behavior tree execution
+            previous_tables = []  # ✅ Reset tables list
+        rclpy.spin_once(node, timeout_sec=0.1) 
 
 
 
 if __name__ == "__main__":
     main()
+
