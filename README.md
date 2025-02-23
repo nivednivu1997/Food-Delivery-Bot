@@ -3,7 +3,7 @@
 
 ## Overview
 
-This ROS 2-based Food delivery Bot project implements a behavior tree for an autonomous delivery robot, handling order processing, navigation, and task execution. It subscribes to robot state updates, processes orders, navigates between predefined locations (e.g., kitchen, tables, home).Upon receiving an order with a table number, the robot moves from its home position to the kitchen and waits for confirmation from the kitchen staff. After confirmation, it proceeds to the assigned table and waits for customer confirmation. Once the delivery is acknowledged, the robot returns to its home position. This ensures that the order is attended to at each stage, making the system more interactive and reliable for restaurant automation.
+This ROS 2-based Food delivery Bot project implements a behavior tree for an autonomous delivery robot, handling order processing, navigation, and task execution. It subscribes to robot state updates, processes orders, navigates between predefined locations (e.g., kitchen, tables, home).Upon receiving an order with a table number, the robot moves from its home position to the kitchen and waits for confirmation from the kitchen staff. After confirmation, it proceeds to the assigned table and waits for customer confirmation. Once the delivery is acknowledged, the robot returns to its home position and waits for the next request. This ensures that the order is attended to at each stage, making the system more interactive and reliable for restaurant automation.
 
 ## [Demonstration]:
 ```
